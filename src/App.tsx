@@ -73,9 +73,12 @@ function App() {
         gameOver || setUserAnswer.length === TOTAL_QEUSTIONS ? (
           <button className="start" onClick={startTrivia}>
             Start
-          </button>) : null
+          </button>) :
+          <div>
+            <h1>Your game session is already finished!</h1>
+          </div>
       }
-      {!gameOver ? <p className="score">Score:</p> : null}
+      {!gameOver ? <p className="score">Score: {score}</p> : null}
       {loading && <p>New question is loading</p>}
       {!loading && !gameOver && (
         <Questionscard
@@ -83,7 +86,7 @@ function App() {
           totalQuestions={TOTAL_QEUSTIONS}
           questions={questions[number].question}
           answers={questions[number].answers}
-          userAnswer={userAnswers ? userAnswers[number] : undefined}
+          userAnswer={userAnswer ? userAnswer[number] : undefined}
           callback={checkAnswer}
         />)}
       {!gameOver && !loading && userAnswer.length === number + 1 && number !== TOTAL_QEUSTIONS - 1 ? (
