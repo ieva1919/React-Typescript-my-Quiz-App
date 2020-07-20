@@ -1,14 +1,16 @@
 import React from 'react'
+import { AnswerObject } from '../App'
 
 type Props = {
     questions: string;
     answers: string[];
-    callback: any;
-    userAnswer: any;
+    callback: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    userAnswer: AnswerObject;
     questionNr: number;
     totalQuestions: number;
 
 }
+
 
 const Questionscard: React.FC<Props> = ({ questions, answers, callback, userAnswer, questionNr, totalQuestions }) => (
 
@@ -18,9 +20,9 @@ const Questionscard: React.FC<Props> = ({ questions, answers, callback, userAnsw
         </p>
         <p dangerouslySetInnerHTML={{ __html: questions }} />
         <div>
-            {answers.map(answer => (
-                <div>
-                    <button disabled={userAnswer} onClick={callback}>
+            {answers.map((answer) => (
+                <div key={answer}>
+                    <button disabled={userAnswer ? true : false} value={answer} onClick={callback}>
                         <span dangerouslySetInnerHTML={{ __html: answer }} />
                     </button>
                 </div>
