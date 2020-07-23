@@ -24,6 +24,7 @@ function App() {
   const [userAnswer, setUserAnswer] = useState<AnswerObject[]>([])
   const [score, setScore] = useState(0)
   const [gameOver, setGameOver] = useState(true)
+  const [showQuestionscard, setShowQuestionscard] = useState(true)
 
 
   const startTrivia = async () => {
@@ -81,6 +82,15 @@ function App() {
           }
           {!gameOver ? <p className="score">Score: {score}</p> : null}
           {loading && <p>New question is loading</p>}
+          {number === TOTAL_QEUSTIONS - 1 &&
+            <div>
+              <h2>Your game session is already finished!</h2>
+              <h3>Your score is {score}</h3>
+              <button className="start" onClick={startTrivia}>
+                New game
+              </button>
+            </div>
+          }
           {!loading && !gameOver && (
             <Questionscard
               questionNr={number + 1}
@@ -95,12 +105,6 @@ function App() {
               Next question
             </button>
           ) : null}
-          {number === TOTAL_QEUSTIONS - 1 &&
-            <div>
-              <h2>Your game session is already finished!</h2>
-              <h3>Your score is {score}</h3>
-            </div>
-          }
         </div>
       </Wrapper>
     </>

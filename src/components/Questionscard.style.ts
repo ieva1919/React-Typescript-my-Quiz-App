@@ -34,6 +34,7 @@ export const ButtonWrapper = styled.div<ButtonWrapperProps>`
         width: 100%;
         height: 40px;
         margin: 5px 0;
+        padding: 6px, 0;
         background: ${({ correct, userClicked }) =>
         correct
             ? 'linear-gradient(90deg, #56ffa4, #59bc86)'
