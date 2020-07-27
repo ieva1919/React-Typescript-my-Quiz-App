@@ -18,18 +18,16 @@ const TOTAL_QEUSTIONS = 10;
 
 function App() {
 
-  const [loading, setLaoding] = useState(false)
+  const [loading, setLaoding] = useState(true)
   const [questions, setQuestions] = useState<QuestionState[]>([])
-  const [number, setNumber] = useState(0)
+  const [number, setNumber] = useState(-1)
   const [userAnswer, setUserAnswer] = useState<AnswerObject[]>([])
   const [score, setScore] = useState(0)
-  const [gameOver, setGameOver] = useState(true)
-  const [showQuestionscard, setShowQuestionscard] = useState(true)
 
 
   const startTrivia = async () => {
     setLaoding(true)
-    setGameOver(false)
+    setNumber(0)
 
     const newQuestions = await fetchQuizQuestions(
       TOTAL_QEUSTIONS,
@@ -39,34 +37,33 @@ function App() {
     setQuestions(newQuestions)
     setScore(0)
     setUserAnswer([])
-    setNumber(0)
     setLaoding(false)
-
   }
 
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!gameOver) {
-      const answer = e.currentTarget.value
-      const correct = questions[number].correct_answer === answer
-      if (correct) setScore(prev => prev + 1)
-      const AnswerObject = {
-        question: questions[number].question,
-        answer,
-        correct,
-        correctAnswer: questions[number].correct_answer
-      }
-      setUserAnswer((prev) => [...prev, AnswerObject])
+    const answer = e.currentTarget.value
+    const correct = questions[number].correct_answer === answer
+    if (correct) setScore(prev => prev + 1)
+    const AnswerObject = {
+      question: questions[number].question,
+      answer,
+      correct,
+      correctAnswer: questions[number].correct_answer
+    }
+    setUserAnswer((prev) => [...prev, AnswerObject])
+
+    if (number === TOTAL_QEUSTIONS - 1) {
+      setNumber(TOTAL_QEUSTIONS)
     }
   }
 
   const nextQuestion = () => {
     const nextQuestion = number + 1
-    if (nextQuestion === TOTAL_QEUSTIONS) {
-      setGameOver(true)
-    } else {
-      setNumber(nextQuestion)
-    }
+    setNumber(nextQuestion)
   }
+
+  const gameOver = number === TOTAL_QEUSTIONS
+
   return (
     <>
       <GlobalStyle />
@@ -74,15 +71,15 @@ function App() {
         <div className="background">
           <h1> React Quiz</h1>
           {
-            gameOver || setUserAnswer.length === TOTAL_QEUSTIONS ? (
+            (gameOver || number === -1) ? (
               <button className="start" onClick={startTrivia}>
                 Start
               </button>) :
               null
           }
           {!gameOver ? <p className="score">Score: {score}</p> : null}
-          {loading && <p>New question is loading</p>}
-          {number === TOTAL_QEUSTIONS - 1 &&
+          {number === 0 && loading && <p>New question is loading</p>}
+          {gameOver &&
             <div>
               <h2>Your game session is already finished!</h2>
               <h3>Your score is {score}</h3>
